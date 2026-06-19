@@ -23,7 +23,7 @@ const statusText: Record<string, string> = {
 
 const ActivityDetailPage: React.FC = () => {
   const router = useRouter();
-  const { getActivityById, updateEquipmentStatus, checkInParticipant, sendPackingReminder, checkAndSendPackingReminders, markReminderShown, hasShownReminder, loadShownRemindersFromStorage, updateActivityStatus, approveApplication, rejectApplication } = useActivityStore();
+  const { getActivityById, updateEquipmentStatus, checkInParticipant, sendPackingReminder, checkAndSendPackingReminders, confirmPackingReminder, hasShownReminder, loadShownRemindersFromStorage, updateActivityStatus, approveApplication, rejectApplication } = useActivityStore();
   const { currentUser, users, getUserById } = useUserStore();
   const [activity, setActivity] = useState<Activity | null>(null);
   const [loading, setLoading] = useState(false);
@@ -50,12 +50,16 @@ const ActivityDetailPage: React.FC = () => {
       if (reminders.length > 0) {
         const reminderActivity = reminders.find(r => r.id === activityId);
         if (reminderActivity && !hasShownReminder(activityId)) {
-          markReminderShown(activityId);
           Taro.showModal({
             title: '打包提醒',
             content: `明天就是"${reminderActivity.name}"的出发日啦，记得检查装备清单，准备好所有物品哦！`,
             showCancel: false,
-            confirmText: '我知道了'
+            confirmText: '我知道了',
+            success: () => {
+              confirmPackingReminder(activityId);
+              const act = getActivityById(activityId);
+              setActivity(act ? { ...act } : null);
+            }
           });
         }
       }
@@ -484,9 +488,14 @@ const ActivityDetailPage: React.FC = () => {
           <>
             {activity.status === 'upcoming' && (
               <>
-                <View className={styles.btn + ' ' + styles.secondary} onClick={handleSendReminder}>
-                  发送提醒
+                <View className={styles.btn + ' ' + styles.secondary} onClick={() => Taro.navigateTo({ url: '/pages/reminder-center/index' })}>
+                  提醒中心
                 </View>
+                {!activity.packingReminderSent && (
+                  <View className={styles.btn + ' ' + styles.secondary} onClick={handleSendReminder}>
+                    发送提醒
+                  </View>
+                )}
                 <View className={styles.btn + ' ' + styles.primary} onClick={() => handleUpdateStatus('ongoing')}>
                   开始活动
                 </View>

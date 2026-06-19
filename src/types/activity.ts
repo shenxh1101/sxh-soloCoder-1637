@@ -103,4 +103,14 @@ export interface MonthlyReport {
   campRatingDistribution: { rating: number; count: number }[];
   averageCampRating: number;
   newActivitiesByLeader: { name: string; count: number }[];
+  comparison?: {
+    totalActivities: 'up' | 'down' | 'same';
+    totalParticipants: 'up' | 'down' | 'same';
+    equipmentUsageCount: 'up' | 'down' | 'same';
+    averageCampRating: 'up' | 'down' | 'same';
+    totalActivitiesDiff: number;
+    totalParticipantsDiff: number;
+    equipmentUsageCountDiff: number;
+    averageCampRatingDiff: number;
+  };
 }

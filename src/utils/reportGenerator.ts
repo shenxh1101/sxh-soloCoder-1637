@@ -13,6 +13,12 @@ const getEquipmentName = (equipmentId: string): string => {
   return equipment?.name || equipmentId;
 };
 
+const getCompareDirection = (current: number, previous: number): 'up' | 'down' | 'same' => {
+  if (current > previous) return 'up';
+  if (current < previous) return 'down';
+  return 'same';
+};
+
 export const generateMonthlyReport = (
   activities: Activity[],
   usageRecords: UsageRecord[],
@@ -66,6 +72,38 @@ export const generateMonthlyReport = (
     .map(([name, count]) => ({ name, count }))
     .sort((a, b) => b.count - a.count);
 
+  const prevMonth = dayjs(month + '-01').subtract(1, 'month').format('YYYY-MM');
+  const prevMonthActivities = activities.filter(a => 
+    dayjs(a.startDate).format('YYYY-MM') === prevMonth || 
+    dayjs(a.endDate).format('YYYY-MM') === prevMonth
+  );
+  const prevTotalParticipants = prevMonthActivities.reduce((sum, a) => sum + a.currentParticipants, 0);
+  const prevMonthUsage = usageRecords.filter(r => dayjs(r.useDate).format('YYYY-MM') === prevMonth);
+  const prevEquipmentUsageCount = prevMonthUsage.length;
+  let prevTotalRating = 0;
+  let prevRatedCount = 0;
+  prevMonthActivities.forEach(a => {
+    if (a.ratings) {
+      prevTotalRating += a.ratings.averageRating;
+      prevRatedCount++;
+    }
+  });
+  const prevAverageCampRating = prevRatedCount > 0 ? prevTotalRating / prevRatedCount : 0;
+
+  const comparison = {
+    totalActivities: getCompareDirection(monthActivities.length, prevMonthActivities.length),
+    totalParticipants: getCompareDirection(totalParticipants, prevTotalParticipants),
+    equipmentUsageCount: getCompareDirection(equipmentUsageCount, prevEquipmentUsageCount),
+    averageCampRating: getCompareDirection(
+      Math.round(averageCampRating * 10) / 10,
+      Math.round(prevAverageCampRating * 10) / 10
+    ),
+    totalActivitiesDiff: monthActivities.length - prevMonthActivities.length,
+    totalParticipantsDiff: totalParticipants - prevTotalParticipants,
+    equipmentUsageCountDiff: equipmentUsageCount - prevEquipmentUsageCount,
+    averageCampRatingDiff: Math.round((averageCampRating - prevAverageCampRating) * 10) / 10
+  };
+
   const report: MonthlyReport = {
     month,
     totalActivities: monthActivities.length,
@@ -74,7 +112,8 @@ export const generateMonthlyReport = (
     equipmentUsageFrequency,
     campRatingDistribution,
     averageCampRating: Math.round(averageCampRating * 10) / 10,
-    newActivitiesByLeader
+    newActivitiesByLeader,
+    comparison
   };
 
   console.log('[ReportGenerator] 报告生成完成', report);

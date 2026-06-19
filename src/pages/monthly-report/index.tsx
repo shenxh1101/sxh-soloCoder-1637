@@ -136,7 +136,22 @@ const MonthlyReportPage: React.FC = () => {
   }, [selectedMonth]);
 
   const isCurrentMonth = selectedMonth === dayjs().format('YYYY-MM');
-  const isReportGenerated = dayjs().date() >= 1 && isCurrentMonth;
+  const isReportGenerated = isCurrentMonth;
+
+  const renderCompareIndicator = (field: 'totalActivities' | 'totalParticipants' | 'equipmentUsageCount' | 'averageCampRating') => {
+    if (!report?.comparison) return null;
+    const direction = report.comparison[field];
+    const diff = report.comparison[`${field}Diff` as keyof typeof report.comparison] as number;
+    
+    if (direction === 'same') return null;
+    
+    return (
+      <View className={`${styles.compareTag} ${styles[direction]}`}>
+        <Text>{direction === 'up' ? '^' : 'v'}</Text>
+        <Text>{diff > 0 ? '+' : ''}{typeof diff === 'number' && field === 'averageCampRating' ? diff.toFixed(1) : diff}</Text>
+      </View>
+    );
+  };
 
   if (loading && !report) {
     return (
@@ -177,7 +192,7 @@ const MonthlyReportPage: React.FC = () => {
           <View className={styles.reportGeneratedNotice}>
             <Text className={styles.noticeIcon}>📄</Text>
             <View className={styles.noticeContent}>
-              <Text className={styles.noticeTitle}>{dayjs().format('YYYY年M月')}报告已生成</Text>
+              <Text className={styles.noticeTitle}>{selectedMonth} 报告已生成</Text>
               <Text className={styles.noticeDesc}>本月暂无户外活动数据</Text>
             </View>
           </View>
@@ -218,33 +233,52 @@ const MonthlyReportPage: React.FC = () => {
           </Picker>
         </View>
 
+        {isReportGenerated && (
+          <View className={styles.generatedBadge}>
+            <Text className={styles.badgeIcon}>✓</Text>
+            <Text className={styles.badgeText}>已生成</Text>
+          </View>
+        )}
+
         <View className={styles.statsGrid}>
           <View className={styles.statCard}>
-            <Text className={styles.statValue}>
-              {report.totalActivities}
-              <Text className={styles.statUnit}>场</Text>
-            </Text>
+            <View className={styles.statHeader}>
+              <Text className={styles.statValue}>
+                {report.totalActivities}
+                <Text className={styles.statUnit}>场</Text>
+              </Text>
+              {renderCompareIndicator('totalActivities')}
+            </View>
             <Text className={styles.statLabel}>活动总数</Text>
           </View>
           <View className={styles.statCard}>
-            <Text className={styles.statValue}>
-              {report.totalParticipants}
-              <Text className={styles.statUnit}>人</Text>
-            </Text>
+            <View className={styles.statHeader}>
+              <Text className={styles.statValue}>
+                {report.totalParticipants}
+                <Text className={styles.statUnit}>人</Text>
+              </Text>
+              {renderCompareIndicator('totalParticipants')}
+            </View>
             <Text className={styles.statLabel}>参与人数</Text>
           </View>
           <View className={styles.statCard}>
-            <Text className={styles.statValue}>
-              {report.equipmentUsageCount}
-              <Text className={styles.statUnit}>次</Text>
-            </Text>
+            <View className={styles.statHeader}>
+              <Text className={styles.statValue}>
+                {report.equipmentUsageCount}
+                <Text className={styles.statUnit}>次</Text>
+              </Text>
+              {renderCompareIndicator('equipmentUsageCount')}
+            </View>
             <Text className={styles.statLabel}>装备使用</Text>
           </View>
           <View className={styles.statCard}>
-            <Text className={styles.statValue}>
-              {report.averageCampRating}
-              <Text className={styles.statUnit}>分</Text>
-            </Text>
+            <View className={styles.statHeader}>
+              <Text className={styles.statValue}>
+                {report.averageCampRating}
+                <Text className={styles.statUnit}>分</Text>
+              </Text>
+              {renderCompareIndicator('averageCampRating')}
+            </View>
             <Text className={styles.statLabel}>平均评分</Text>
           </View>
         </View>

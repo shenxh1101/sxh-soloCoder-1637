@@ -15,7 +15,7 @@ import styles from './index.module.scss';
 type TabType = 'all' | 'upcoming' | 'ongoing' | 'completed';
 
 const HomePage: React.FC = () => {
-  const { activities, setActivities, checkAndSendPackingReminders, markReminderShown, hasShownReminder, loadShownRemindersFromStorage } = useActivityStore();
+  const { activities, setActivities, checkAndSendPackingReminders, confirmPackingReminder, hasShownReminder, loadShownRemindersFromStorage } = useActivityStore();
   const { currentUser, setCurrentUser, users } = useUserStore();
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [loading, setLoading] = useState(false);
@@ -36,12 +36,14 @@ const HomePage: React.FC = () => {
       
       if (unshownReminders.length > 0) {
         const firstReminder = unshownReminders[0];
-        markReminderShown(firstReminder.id);
         Taro.showModal({
           title: '打包提醒',
           content: `明天就是"${firstReminder.name}"的出发日啦，记得检查装备清单，准备好所有物品哦！`,
           showCancel: false,
-          confirmText: '我知道了'
+          confirmText: '我知道了',
+          success: () => {
+            confirmPackingReminder(firstReminder.id);
+          }
         });
       }
     }, 500);
@@ -85,7 +87,7 @@ const HomePage: React.FC = () => {
 
   const quickActions = [
     { icon: '🏕️', label: '创建活动', color: 'rgba(46, 125, 50, 0.1)', action: () => Taro.switchTab({ url: '/pages/create/index' }) },
-    { icon: '🔍', label: '附近活动', color: 'rgba(255, 152, 0, 0.1)', action: () => Taro.showToast({ title: '功能开发中', icon: 'none' }) },
+    { icon: '�', label: '提醒中心', color: 'rgba(255, 152, 0, 0.1)', action: () => Taro.navigateTo({ url: '/pages/reminder-center/index' }) },
     { icon: '📋', label: '我的活动', color: 'rgba(22, 93, 255, 0.1)', action: () => Taro.switchTab({ url: '/pages/mine/index' }) },
     { icon: '⭐', label: '领队排行', color: 'rgba(255, 193, 7, 0.1)', action: () => Taro.showToast({ title: '功能开发中', icon: 'none' }) }
   ];

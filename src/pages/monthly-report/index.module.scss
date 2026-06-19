@@ -43,7 +43,7 @@
   margin: $spacing-md $page-padding;
   padding: $spacing-md;
   background: linear-gradient(90deg, #e3f2fd 0%, #bbdefb 100%);
-  border-radius: $border-radius-md;
+  border-radius: $radius-md;
 
   .noticeIcon {
     font-size: 40rpx;
@@ -117,11 +117,17 @@
     padding: $spacing-lg;
     backdrop-filter: blur(10px);
 
+    .statHeader {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      margin-bottom: $spacing-xs;
+    }
+
     .statValue {
       font-size: 48rpx;
       font-weight: $font-weight-bold;
       color: $color-text-white;
-      margin-bottom: $spacing-xs;
     }
 
     .statLabel {
@@ -134,6 +140,48 @@
       color: rgba(255, 255, 255, 0.6);
       margin-left: $spacing-xs;
     }
+  }
+
+  .generatedBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-xs $spacing-md;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: $radius-round;
+    margin-bottom: $spacing-md;
+    align-self: flex-start;
+
+    .badgeIcon {
+      font-size: $font-size-sm;
+      color: #81C784;
+    }
+
+    .badgeText {
+      font-size: $font-size-sm;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: $font-weight-medium;
+    }
+  }
+}
+
+.compareTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2rpx;
+  padding: 2rpx 8rpx;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+
+  &.up {
+    background-color: rgba(76, 175, 80, 0.3);
+    color: #A5D6A7;
+  }
+
+  &.down {
+    background-color: rgba(244, 67, 54, 0.3);
+    color: #EF9A9A;
   }
 }
 

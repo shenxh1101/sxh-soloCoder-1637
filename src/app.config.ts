@@ -9,7 +9,8 @@ export default defineAppConfig({
     'pages/activity-rating/index',
     'pages/monthly-report/index',
     'pages/leader-approval/index',
-    'pages/equipment-list/index'
+    'pages/equipment-list/index',
+    'pages/reminder-center/index'
   ],
   window: {
     backgroundTextStyle: 'light',

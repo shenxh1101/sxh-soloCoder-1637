@@ -26,6 +26,7 @@ interface ActivityState {
   addReview: (activityId: string, review: Omit<ActivityReview, 'id' | 'createdAt'>) => ActivityReview | null;
   sendPackingReminder: (activityId: string) => void;
   checkAndSendPackingReminders: () => Activity[];
+  confirmPackingReminder: (activityId: string) => void;
   markReminderShown: (activityId: string) => void;
   hasShownReminder: (activityId: string) => boolean;
   loadShownRemindersFromStorage: () => void;
@@ -431,29 +432,40 @@ export const useActivityStore = create<ActivityState>((set, get) => ({
       return daysUntilStart === 1;
     });
 
-    if (activitiesToRemind.length > 0) {
-      set(state => ({
-        activities: state.activities.map(a => {
-          const needsReminder = activitiesToRemind.find(r => r.id === a.id);
-          if (!needsReminder) return a;
-
-          const timelineItem: TimelineItem = {
-            id: `t_${Date.now()}_${a.id}`,
-            time: dayjs().format('YYYY-MM-DD HH:mm'),
-            type: 'reminder',
-            content: '出发前1天打包提醒已发送'
-          };
-          return {
-            ...a,
-            packingReminderSent: true,
-            timeline: [...a.timeline, timelineItem]
-          };
-        })
-      }));
-    }
-
     console.log('[ActivityStore] 需要提醒的活动数量', activitiesToRemind.length);
     return activitiesToRemind;
+  },
+
+  confirmPackingReminder: (activityId) => {
+    console.log('[ActivityStore] 确认打包提醒', { activityId });
+    const now = Date.now();
+    
+    get().markReminderShown(activityId);
+    
+    set(state => ({
+      activities: state.activities.map(a => {
+        if (a.id !== activityId) return a;
+        if (a.packingReminderSent) return a;
+
+        const alreadyHasTimeline = a.timeline.some(
+          t => t.type === 'reminder' || (t.type === 'system' && t.content.includes('打包提醒'))
+        );
+
+        return {
+          ...a,
+          packingReminderSent: true,
+          timeline: alreadyHasTimeline ? a.timeline : [
+            ...a.timeline,
+            {
+              id: `t_${now}`,
+              time: dayjs().format('YYYY-MM-DD HH:mm'),
+              type: 'reminder',
+              content: '出发前1天打包提醒已发送'
+            }
+          ]
+        };
+      })
+    }));
   },
 
   markReminderShown: (activityId) => {
