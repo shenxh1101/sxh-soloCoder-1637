@@ -23,7 +23,7 @@ const statusText: Record<string, string> = {
 
 const ActivityDetailPage: React.FC = () => {
   const router = useRouter();
-  const { getActivityById, updateEquipmentStatus, checkInParticipant, sendPackingReminder, updateActivityStatus, approveApplication, rejectApplication } = useActivityStore();
+  const { getActivityById, updateEquipmentStatus, checkInParticipant, sendPackingReminder, checkAndSendPackingReminders, updateActivityStatus, approveApplication, rejectApplication } = useActivityStore();
   const { currentUser } = useUserStore();
   const [activity, setActivity] = useState<Activity | null>(null);
   const [loading, setLoading] = useState(false);
@@ -45,6 +45,19 @@ const ActivityDetailPage: React.FC = () => {
   const loadActivity = () => {
     setLoading(true);
     setTimeout(() => {
+      const reminders = checkAndSendPackingReminders();
+      if (reminders.length > 0) {
+        const reminderActivity = reminders.find(r => r.id === activityId);
+        if (reminderActivity) {
+          Taro.showModal({
+            title: '打包提醒',
+            content: `明天就是"${reminderActivity.name}"的出发日啦，记得检查装备清单，准备好所有物品哦！`,
+            showCancel: false,
+            confirmText: '我知道了'
+          });
+        }
+      }
+      
       const act = getActivityById(activityId);
       setActivity(act || null);
       setLoading(false);

@@ -19,6 +19,7 @@ const MonthlyReportPage: React.FC = () => {
   const [selectedMonth, setSelectedMonth] = useState(dayjs().format('YYYY-MM'));
   const [loading, setLoading] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [showAutoGenerateTip, setShowAutoGenerateTip] = useState(false);
 
   useEffect(() => {
     initData();
@@ -29,6 +30,17 @@ const MonthlyReportPage: React.FC = () => {
       initData();
     } else {
       loadReport();
+    }
+    
+    const today = dayjs().date();
+    const isFirstDayOfMonth = today === 1;
+    const currentMonth = dayjs().format('YYYY-MM');
+    const hasShownTip = Taro.getStorageSync(`report_shown_${currentMonth}`);
+    
+    if (isFirstDayOfMonth && !hasShownTip) {
+      setShowAutoGenerateTip(true);
+      Taro.setStorageSync(`report_shown_${currentMonth}`, true);
+      setTimeout(() => setShowAutoGenerateTip(false), 3000);
     }
   });
 
@@ -163,6 +175,13 @@ const MonthlyReportPage: React.FC = () => {
 
   return (
     <View className={styles.page}>
+      {showAutoGenerateTip && (
+        <View className={styles.autoGenerateTip}>
+          <Text className={styles.tipIcon}>✨</Text>
+          <Text className={styles.tipText}>{dayjs().format('YYYY年M月')}月度报告已自动生成</Text>
+        </View>
+      )}
+      
       <View className={styles.header}>
         <View className={styles.titleRow}>
           <Text className={styles.title}>月度报告</Text>

@@ -1,3 +1,4 @@
+import Taro from '@tarojs/taro';
 import dayjs from 'dayjs';
 import type { CreateActivityForm, ValidationResult } from '@/types/activity';
 
@@ -10,21 +11,25 @@ export const validateCreateActivity = (form: CreateActivityForm): ValidationResu
   }
 
   if (!form.startDate) {
-    errors.push('开始日期不能为空');
+    errors.push('请选择开始日期');
   } else {
     const startDate = dayjs(form.startDate);
-    const today = dayjs().startOf('day');
-    if (startDate.isBefore(today)) {
-      errors.push('开始日期必须是未来日期');
+    const tomorrow = dayjs().add(1, 'day').startOf('day');
+    if (!startDate.isValid()) {
+      errors.push('开始日期格式不正确');
+    } else if (startDate.isBefore(tomorrow)) {
+      errors.push('开始日期必须是明天及以后的日期');
     }
   }
 
   if (!form.endDate) {
-    errors.push('结束日期不能为空');
+    errors.push('请选择结束日期');
   } else if (form.startDate && form.endDate) {
     const startDate = dayjs(form.startDate);
     const endDate = dayjs(form.endDate);
-    if (endDate.isBefore(startDate)) {
+    if (!endDate.isValid()) {
+      errors.push('结束日期格式不正确');
+    } else if (endDate.isBefore(startDate)) {
       errors.push('结束日期不能早于开始日期');
     }
   }

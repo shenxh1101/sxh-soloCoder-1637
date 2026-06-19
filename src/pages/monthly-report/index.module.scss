@@ -6,6 +6,37 @@
   padding-bottom: 160rpx;
 }
 
+.autoGenerateTip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-md;
+  background: linear-gradient(90deg, #e8f5e9 0%, #c8e6c9 100%);
+  color: $color-primary;
+  font-size: $font-size-sm;
+  animation: slideDown 0.5s ease-out;
+
+  .tipIcon {
+    margin-right: $spacing-sm;
+    font-size: $font-size-md;
+  }
+
+  .tipText {
+    font-weight: $font-weight-medium;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .header {
   padding: $spacing-xl $page-padding;
   background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);

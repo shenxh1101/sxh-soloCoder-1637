@@ -17,10 +17,11 @@ interface ActivityState {
   rejectApplication: (activityId: string, applicationId: string) => void;
   updateEquipmentStatus: (activityId: string, equipmentId: string, status: EquipmentStatus) => void;
   checkInParticipant: (activityId: string, userId: string) => void;
-  addLog: (activityId: string, log: Omit<ActivityLog, 'id' | 'createdAt'>) => void;
+  addLog: (activityId: string, log: Omit<ActivityLog, 'id' | 'createdAt'>) => ActivityLog | null;
   addPhoto: (activityId: string, userId: string, userName: string, imageUrl: string) => void;
   addReview: (activityId: string, review: Omit<ActivityReview, 'id' | 'createdAt'>) => void;
   sendPackingReminder: (activityId: string) => void;
+  checkAndSendPackingReminders: () => Activity[];
   updateActivityStatus: (activityId: string, status: Activity['status']) => void;
 }
 
@@ -90,6 +91,7 @@ export const useActivityStore = create<ActivityState>((set, get) => ({
         content: `活动"${form.name}"已创建`
       }],
       joinApplications: [],
+      logs: [],
       createdAt: dayjs().format('YYYY-MM-DD HH:mm'),
       packingReminderSent: false,
       itinerary
@@ -283,6 +285,7 @@ export const useActivityStore = create<ActivityState>((set, get) => ({
         if (a.id === activityId) {
           return {
             ...a,
+            logs: [...(a.logs || []), newLog],
             timeline: [...a.timeline, timelineItem]
           };
         }
@@ -380,6 +383,46 @@ export const useActivityStore = create<ActivityState>((set, get) => ({
         return a;
       })
     }));
+  },
+
+  checkAndSendPackingReminders: () => {
+    console.log('[ActivityStore] 检查打包提醒');
+    const { activities } = get();
+    const today = dayjs().startOf('day');
+    
+    const activitiesToRemind = activities.filter(a => {
+      if (a.status !== 'upcoming') return false;
+      if (a.packingReminderSent) return false;
+      
+      const startDate = dayjs(a.startDate).startOf('day');
+      const daysUntilStart = startDate.diff(today, 'day');
+      
+      return daysUntilStart === 1;
+    });
+
+    if (activitiesToRemind.length > 0) {
+      set(state => ({
+        activities: state.activities.map(a => {
+          const needsReminder = activitiesToRemind.find(r => r.id === a.id);
+          if (!needsReminder) return a;
+
+          const timelineItem: TimelineItem = {
+            id: `t_${Date.now()}_${a.id}`,
+            time: dayjs().format('YYYY-MM-DD HH:mm'),
+            type: 'reminder',
+            content: '出发前1天打包提醒已发送'
+          };
+          return {
+            ...a,
+            packingReminderSent: true,
+            timeline: [...a.timeline, timelineItem]
+          };
+        })
+      }));
+    }
+
+    console.log('[ActivityStore] 需要提醒的活动数量', activitiesToRemind.length);
+    return activitiesToRemind;
   },
 
   updateActivityStatus: (activityId, status) => {

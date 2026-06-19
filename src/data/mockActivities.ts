@@ -47,6 +47,7 @@ export const mockActivities: Activity[] = [
       mockJoinApplications[0],
       { ...mockJoinApplications[1], activityId: 'act1' }
     ],
+    logs: [],
     createdAt: '2024-06-15 09:00',
     packingReminderSent: false,
     itinerary: [
@@ -95,6 +96,34 @@ export const mockActivities: Activity[] = [
       { id: 't9', time: '2024-06-16 12:00', type: 'system', content: '活动已完成' }
     ],
     joinApplications: [],
+    logs: [
+      {
+        id: 'log1',
+        activityId: 'act2',
+        userId: 'u1',
+        userName: '露营达人',
+        date: '2024-06-15',
+        content: '今天的千岛湖太美了！湖水清澈见底，营地就在湖边，风景绝佳。下午体验了皮划艇，非常刺激有趣。晚上的篝火晚会大家一起唱歌跳舞，气氛超棒！',
+        images: [
+          'https://picsum.photos/id/1015/750/500',
+          'https://picsum.photos/id/1018/750/500'
+        ],
+        createdAt: '2024-06-15 21:30'
+      },
+      {
+        id: 'log2',
+        activityId: 'act2',
+        userId: 'u3',
+        userName: '星空守望者',
+        date: '2024-06-16',
+        content: '凌晨起来看星空，漫天繁星，还看到了银河！早上的日出也很美，湖面雾气缭绕，宛如仙境。这次露营体验满分！',
+        images: [
+          'https://picsum.photos/id/1039/750/500',
+          'https://picsum.photos/id/1044/750/500'
+        ],
+        createdAt: '2024-06-16 08:00'
+      }
+    ],
     ratings: {
       facilities: 4.5,
       route: 4.8,
@@ -137,6 +166,7 @@ export const mockActivities: Activity[] = [
       { id: 't10', time: '2024-06-18 14:00', type: 'system', content: '活动"武功山徒步露营"已创建' }
     ],
     joinApplications: [],
+    logs: [],
     createdAt: '2024-06-18 14:00',
     packingReminderSent: false,
     itinerary: []
@@ -168,6 +198,7 @@ export const mockActivities: Activity[] = [
       { id: 't11', time: '2024-06-16 09:00', type: 'system', content: '活动"莫干山亲子露营"已创建' }
     ],
     joinApplications: [],
+    logs: [],
     createdAt: '2024-06-16 09:00',
     packingReminderSent: false,
     itinerary: []
@@ -195,6 +226,7 @@ export const mockActivities: Activity[] = [
     },
     timeline: [],
     joinApplications: [],
+    logs: [],
     ratings: {
       facilities: 4.0,
       route: 4.2,
@@ -229,6 +261,7 @@ export const mockActivities: Activity[] = [
     },
     timeline: [],
     joinApplications: [],
+    logs: [],
     createdAt: '2024-06-19 11:00',
     packingReminderSent: false,
     itinerary: []

@@ -11,7 +11,7 @@ import styles from './index.module.scss';
 const ActivityRatingPage: React.FC = () => {
   const router = useRouter();
   const { getActivityById, addReview } = useActivityStore();
-  const { currentUser, updateUserRating, incrementActivityCount } = useUserStore();
+  const { currentUser, updateLeaderRating, incrementLeaderActivityCount } = useUserStore();
   const [activity, setActivity] = useState<Activity | null>(null);
   const [facilitiesRating, setFacilitiesRating] = useState(5);
   const [routeRating, setRouteRating] = useState(5);
@@ -84,8 +84,8 @@ const ActivityRatingPage: React.FC = () => {
       });
 
       const avgRating = (facilitiesRating + routeRating) / 2;
-      updateUserRating(avgRating);
-      incrementActivityCount();
+      updateLeaderRating(activity.leaderId, avgRating);
+      incrementLeaderActivityCount(activity.leaderId);
 
       Taro.hideLoading();
       Taro.showToast({ title: '评分成功', icon: 'success' });

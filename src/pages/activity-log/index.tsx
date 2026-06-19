@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, Image, ScrollView, Textarea } from '@tarojs/components';
 import Taro, { useRouter, usePullDownRefresh, useDidShow } from '@tarojs/taro';
+import dayjs from 'dayjs';
 import { useActivityStore } from '@/store/useActivityStore';
 import { useUserStore } from '@/store/useUserStore';
-import { mockActivityLogs } from '@/data/mockActivities';
 import EmptyState from '@/components/EmptyState';
 import type { Activity, ActivityLog } from '@/types/activity';
 import styles from './index.module.scss';
@@ -39,10 +39,7 @@ const ActivityLogPage: React.FC = () => {
     setTimeout(() => {
       const act = getActivityById(activityId);
       setActivity(act || null);
-      
-      const activityLogs = mockActivityLogs.filter(log => log.activityId === activityId);
-      setLogs(activityLogs);
-      
+      setLogs(act?.logs || []);
       setLoading(false);
       Taro.stopPullDownRefresh();
     }, 300);
@@ -53,10 +50,7 @@ const ActivityLogPage: React.FC = () => {
     setTimeout(() => {
       const act = getActivityById(activityId);
       setActivity(act ? { ...act } : null);
-      
-      const activityLogs = mockActivityLogs.filter(log => log.activityId === activityId);
-      setLogs([...activityLogs]);
-      
+      setLogs([...(act?.logs || [])]);
       setLoading(false);
       Taro.stopPullDownRefresh();
       Taro.showToast({ title: '刷新成功', icon: 'success' });

@@ -24,6 +24,7 @@ export interface Activity {
   timeline: TimelineItem[];
   joinApplications: JoinApplication[];
   ratings?: ActivityRatings;
+  logs: ActivityLog[];
   createdAt: string;
   packingReminderSent: boolean;
   itinerary: ItineraryItem[];

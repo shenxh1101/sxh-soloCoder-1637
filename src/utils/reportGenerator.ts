@@ -1,6 +1,13 @@
+import Taro from '@tarojs/taro';
 import dayjs from 'dayjs';
 import type { Activity, MonthlyReport } from '@/types/activity';
-import type { UsageRecord } from '@/types/equipment';
+import type { UsageRecord, Equipment } from '@/types/equipment';
+import { mockEquipments } from '@/data/mockEquipments';
+
+const getEquipmentName = (equipmentId: string): string => {
+  const equipment = mockEquipments.find(e => e.id === equipmentId);
+  return equipment?.name || equipmentId;
+};
 
 export const generateMonthlyReport = (
   activities: Activity[],
@@ -21,7 +28,8 @@ export const generateMonthlyReport = (
 
   const equipmentUsageMap = new Map<string, number>();
   monthUsage.forEach(r => {
-    equipmentUsageMap.set(r.equipmentId, (equipmentUsageMap.get(r.equipmentId) || 0) + 1);
+    const name = getEquipmentName(r.equipmentId);
+    equipmentUsageMap.set(name, (equipmentUsageMap.get(name) || 0) + 1);
   });
   const equipmentUsageFrequency = Array.from(equipmentUsageMap.entries())
     .map(([name, count]) => ({ name, count }))
@@ -69,7 +77,7 @@ export const generateMonthlyReport = (
   return report;
 };
 
-export const exportToPDF = async (report: MonthlyReport): Promise<void> => {
+export const exportToPDF = async (report: MonthlyReport): Promise<string | null> => {
   console.log('[ReportGenerator] 开始导出PDF', report);
   
   try {
@@ -124,16 +132,19 @@ export const exportToPDF = async (report: MonthlyReport): Promise<void> => {
 
     Taro.showModal({
       title: '导出成功',
-      content: 'PDF报告已生成，可长按保存',
+      content: `${report.month}月度报告已生成PDF文件，可保存到本地或分享给好友`,
+      confirmText: '好的',
       showCancel: false
     });
 
     console.log('[ReportGenerator] PDF Data URI:', pdfOutput.substring(0, 100) + '...');
+    return pdfOutput;
   } catch (error) {
     console.error('[ReportGenerator] PDF导出失败', error);
     Taro.showToast({
       title: '导出失败，请重试',
       icon: 'none'
     });
+    return null;
   }
 };
