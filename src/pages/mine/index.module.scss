@@ -1,0 +1,293 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background-color: $color-bg-page;
+  padding-bottom: $spacing-xl;
+}
+
+.profileHeader {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  padding: $spacing-xl $page-padding;
+  padding-bottom: $spacing-xl * 2;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -100rpx;
+    right: -100rpx;
+    width: 300rpx;
+    height: 300rpx;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+}
+
+.profileRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+  position: relative;
+  z-index: 1;
+}
+
+.avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: $radius-round;
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.profileInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.userName {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  @include text-ellipsis;
+}
+
+.gradeRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-top: $spacing-sm;
+}
+
+.progressSection {
+  margin-top: $spacing-lg;
+  padding: $spacing-lg;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: $radius-lg;
+  position: relative;
+  z-index: 1;
+}
+
+.progressLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.progressText {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.progressValue {
+  font-size: $font-size-sm;
+  color: $color-text-white;
+  font-weight: $font-weight-semibold;
+}
+
+.progressBar {
+  height: 12rpx;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: $radius-round;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #FFD700, #FFA500);
+  border-radius: $radius-round;
+  transition: width $transition-base;
+}
+
+.nextGradeText {
+  font-size: $font-size-xs;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: $spacing-xs;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+  margin: -$spacing-xl $page-padding $spacing-lg;
+  position: relative;
+  z-index: 2;
+}
+
+.statCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  text-align: center;
+  box-shadow: $shadow-card;
+}
+
+.statValue {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+}
+
+.menuSection {
+  padding: 0 $page-padding;
+  margin-bottom: $spacing-lg;
+}
+
+.menuTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.menuList {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-lg;
+  border-bottom: 1rpx solid $color-divider;
+  transition: all $transition-fast;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:active {
+    background-color: $color-bg-hover;
+  }
+}
+
+.menuIcon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: $spacing-md;
+  font-size: 32rpx;
+}
+
+.menuContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.menuText {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.menuSubtitle {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.menuArrow {
+  font-size: $font-size-lg;
+  color: $color-text-tertiary;
+}
+
+.menuBadge {
+  margin-right: $spacing-sm;
+  padding: 2rpx $spacing-sm;
+  background-color: $color-error;
+  color: $color-text-white;
+  font-size: $font-size-xs;
+  border-radius: $radius-round;
+}
+
+.discountBanner {
+  margin: $spacing-md $page-padding $spacing-lg;
+  padding: $spacing-lg;
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 193, 7, 0.1) 100%);
+  border: 1rpx solid rgba(255, 152, 0, 0.3);
+  border-radius: $radius-lg;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.discountIcon {
+  font-size: 48rpx;
+}
+
+.discountInfo {
+  flex: 1;
+}
+
+.discountTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-accent;
+}
+
+.discountDesc {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  margin-top: 4rpx;
+}
+
+.privilegesCard {
+  margin: 0 $page-padding $spacing-lg;
+  padding: $spacing-lg;
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+}
+
+.privilegesTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.privilegeList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-md;
+}
+
+.privilegeItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  background-color: $color-bg-page;
+  border-radius: $radius-md;
+}
+
+.privilegeIcon {
+  font-size: 28rpx;
+}
+
+.privilegeText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.privilegeText.active {
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.privilegeLocked {
+  opacity: 0.4;
+}

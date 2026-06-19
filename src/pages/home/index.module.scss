@@ -1,0 +1,213 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(46, 125, 50, 0.08) 0%, $color-bg-page 20%);
+  padding-bottom: $spacing-xl;
+}
+
+.header {
+  padding: $spacing-lg $page-padding $spacing-md;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+}
+
+.welcomeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-lg;
+}
+
+.welcomeText {
+  color: $color-text-white;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+}
+
+.subText {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: $font-size-sm;
+  margin-top: $spacing-xs;
+}
+
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-round;
+  border: 3rpx solid rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.quickActions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-md;
+  padding: $spacing-lg;
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  margin: $spacing-md $page-padding;
+  box-shadow: $shadow-card;
+}
+
+.actionItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xs;
+
+  &:active {
+    opacity: 0.8;
+    transform: scale(0.95);
+  }
+}
+
+.actionIcon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-lg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+}
+
+.actionLabel {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.section {
+  padding: 0 $page-padding;
+  margin-top: $spacing-lg;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.seeAll {
+  font-size: $font-size-sm;
+  color: $color-primary;
+}
+
+.tabs {
+  display: flex;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+  padding: 0 $page-padding;
+  overflow-x: auto;
+  white-space: nowrap;
+  @include scroll-x-container;
+}
+
+.tabItem {
+  @include scroll-x-item(auto);
+  padding: $spacing-sm $spacing-lg;
+  border-radius: $radius-round;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  background-color: $color-bg-card;
+  transition: all $transition-base;
+
+  &.active {
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    color: $color-text-white;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.leaderBoard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.leaderItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-md 0;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.rankBadge {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-round;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-md;
+  color: $color-text-white;
+
+  &.rank1 {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+  }
+  &.rank2 {
+    background: linear-gradient(135deg, #C0C0C0, #A0A0A0);
+  }
+  &.rank3 {
+    background: linear-gradient(135deg, #CD7F32, #8B4513);
+  }
+  &.other {
+    background-color: $color-divider;
+    color: $color-text-secondary;
+  }
+}
+
+.leaderAvatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: $radius-round;
+  background-color: $color-divider;
+}
+
+.leaderInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.leaderName {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  @include text-ellipsis;
+}
+
+.leaderStats {
+  display: flex;
+  gap: $spacing-md;
+  margin-top: $spacing-xs;
+}
+
+.statItem {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.statValue {
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+}
+
+.loading {
+  padding: $spacing-xl;
+  text-align: center;
+  color: $color-text-tertiary;
+}

@@ -1,0 +1,367 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background-color: $color-bg-page;
+  padding-bottom: 200rpx;
+}
+
+.formSection {
+  background-color: $color-bg-card;
+  margin: $spacing-md $page-padding;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-lg;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  &::before {
+    content: '';
+    width: 6rpx;
+    height: 32rpx;
+    background: linear-gradient(180deg, $color-primary 0%, $color-primary-light 100%);
+    border-radius: $radius-round;
+  }
+}
+
+.formItem {
+  margin-bottom: $spacing-lg;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.label {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-sm;
+  display: flex;
+  align-items: center;
+
+  .required {
+    color: $color-error;
+    margin-right: $spacing-xs;
+  }
+}
+
+.input {
+  width: 100%;
+  height: 80rpx;
+  padding: 0 $spacing-md;
+  background-color: $color-bg-page;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-sizing: border-box;
+  transition: all $transition-fast;
+
+  &:focus {
+    border-color: $color-primary;
+    background-color: $color-bg-card;
+  }
+}
+
+.textarea {
+  width: 100%;
+  min-height: 160rpx;
+  padding: $spacing-md;
+  background-color: $color-bg-page;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-sizing: border-box;
+  line-height: $line-height-normal;
+  transition: all $transition-fast;
+
+  &:focus {
+    border-color: $color-primary;
+    background-color: $color-bg-card;
+  }
+}
+
+.dateRow {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.dateItem {
+  flex: 1;
+}
+
+.weatherRow {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.weatherItem {
+  flex: 1;
+}
+
+.previewSection {
+  background-color: $color-bg-card;
+  margin: $spacing-md $page-padding;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.previewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.recommendTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.refreshBtn {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.recommendReason {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  background-color: rgba(46, 125, 50, 0.1);
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-md;
+  line-height: $line-height-normal;
+}
+
+.equipmentPreviewList {
+  max-height: 400rpx;
+  overflow-y: auto;
+}
+
+.equipmentPreviewItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md 0;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.equipmentPreviewInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.equipmentPreviewName {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  @include text-ellipsis;
+}
+
+.equipmentPreviewMeta {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.quantityBadge {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  background-color: rgba(46, 125, 50, 0.1);
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-round;
+  font-weight: $font-weight-medium;
+}
+
+.itineraryPreview {
+  margin-top: $spacing-md;
+}
+
+.itineraryTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.itineraryItem {
+  display: flex;
+  gap: $spacing-md;
+  padding: $spacing-sm 0;
+  padding-left: $spacing-md;
+  border-left: 2rpx solid $color-primary;
+  margin-left: $spacing-sm;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: -10rpx;
+    top: 16rpx;
+    width: 18rpx;
+    height: 18rpx;
+    background-color: $color-primary;
+    border-radius: $radius-round;
+  }
+}
+
+.itineraryTime {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+  min-width: 120rpx;
+}
+
+.itineraryContent {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc($spacing-md + env(safe-area-inset-bottom));
+  box-shadow: $shadow-float;
+  display: flex;
+  gap: $spacing-md;
+  z-index: 100;
+}
+
+.secondaryBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-lg;
+  background-color: $color-bg-page;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-button;
+  color: $color-text-secondary;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+
+  &:active {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+}
+
+.primaryBtn {
+  @include button-reset;
+  flex: 2;
+  height: $button-height-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.tips {
+  background-color: rgba(255, 152, 0, 0.1);
+  border-left: 6rpx solid $color-warning;
+  padding: $spacing-md;
+  margin: $spacing-md $page-padding;
+  border-radius: $radius-sm;
+}
+
+.tipsText {
+  font-size: $font-size-sm;
+  color: $color-warning;
+  line-height: $line-height-normal;
+}
+
+.selectRow {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.selectItem {
+  padding: $spacing-sm $spacing-md;
+  background-color: $color-bg-page;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-round;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  transition: all $transition-fast;
+
+  &.active {
+    background-color: rgba(46, 125, 50, 0.1);
+    border-color: $color-primary;
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.counterRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.counterBtn {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-round;
+  background-color: $color-bg-page;
+  border: 2rpx solid $color-border;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-xl;
+  color: $color-text-secondary;
+  transition: all $transition-fast;
+
+  &:active {
+    transform: scale(0.95);
+    background-color: $color-primary;
+    color: $color-text-white;
+    border-color: $color-primary;
+  }
+}
+
+.counterValue {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  min-width: 80rpx;
+  text-align: center;
+}

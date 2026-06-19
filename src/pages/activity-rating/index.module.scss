@@ -1,0 +1,330 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background-color: $color-bg-page;
+  padding-bottom: $spacing-xxl;
+}
+
+.header {
+  padding: $spacing-xl $page-padding;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  text-align: center;
+
+  .icon {
+    font-size: 80rpx;
+    margin-bottom: $spacing-md;
+  }
+
+  .title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-white;
+    margin-bottom: $spacing-xs;
+  }
+
+  .subtitle {
+    font-size: $font-size-sm;
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.formCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  margin: -$spacing-lg $page-padding $spacing-md;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  position: relative;
+  z-index: 2;
+}
+
+.activityInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding-bottom: $spacing-lg;
+  border-bottom: 1rpx solid $color-divider;
+  margin-bottom: $spacing-lg;
+
+  .avatar {
+    width: 88rpx;
+    height: 88rpx;
+    border-radius: $radius-lg;
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40rpx;
+  }
+
+  .info {
+    flex: 1;
+
+    .name {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      color: $color-text-primary;
+      margin-bottom: $spacing-xs;
+    }
+
+    .date {
+      font-size: $font-size-sm;
+      color: $color-text-tertiary;
+    }
+  }
+}
+
+.ratingSection {
+  margin-bottom: $spacing-xl;
+
+  .sectionTitle {
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-md;
+  }
+
+  .ratingItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $spacing-lg 0;
+    border-bottom: 1rpx solid $color-divider;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+
+      .icon {
+        font-size: 36rpx;
+      }
+
+      .text {
+        font-size: $font-size-md;
+        color: $color-text-primary;
+      }
+    }
+
+    .ratingControl {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+
+      .score {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-bold;
+        color: $color-primary;
+        min-width: 60rpx;
+        text-align: right;
+      }
+    }
+  }
+}
+
+.commentSection {
+  .sectionTitle {
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-md;
+  }
+
+  .textarea {
+    width: 100%;
+    min-height: 200rpx;
+    padding: $spacing-md;
+    border: 1rpx solid $color-divider;
+    border-radius: $radius-md;
+    font-size: $font-size-md;
+    color: $color-text-primary;
+    background-color: $color-bg-page;
+    line-height: 1.6;
+  }
+
+  .charCount {
+    text-align: right;
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+    margin-top: $spacing-xs;
+  }
+}
+
+.reviewsSection {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  margin: $spacing-md $page-padding;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+
+  .sectionTitle {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-lg;
+  }
+
+  .reviewItem {
+    padding: $spacing-lg 0;
+    border-bottom: 1rpx solid $color-divider;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .reviewHeader {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+      margin-bottom: $spacing-sm;
+
+      .avatar {
+        width: 64rpx;
+        height: 64rpx;
+        border-radius: $radius-round;
+        background-color: $color-divider;
+      }
+
+      .info {
+        flex: 1;
+
+        .name {
+          font-size: $font-size-md;
+          font-weight: $font-weight-medium;
+          color: $color-text-primary;
+        }
+
+        .time {
+          font-size: $font-size-xs;
+          color: $color-text-tertiary;
+          margin-top: $spacing-xs;
+        }
+      }
+    }
+
+    .reviewRatings {
+      display: flex;
+      gap: $spacing-lg;
+      margin-bottom: $spacing-sm;
+
+      .ratingTag {
+        display: flex;
+        align-items: center;
+        gap: $spacing-xs;
+        font-size: $font-size-sm;
+        color: $color-text-secondary;
+
+        .score {
+          color: $color-primary;
+          font-weight: $font-weight-medium;
+        }
+      }
+    }
+
+    .reviewContent {
+      font-size: $font-size-md;
+      color: $color-text-primary;
+      line-height: 1.6;
+    }
+  }
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc($spacing-md + env(safe-area-inset-bottom));
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.1);
+  z-index: 100;
+
+  .submitBtn {
+    width: 100%;
+    height: 88rpx;
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    border-radius: $radius-lg;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color-text-white;
+    font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+
+    &.disabled {
+      opacity: 0.5;
+    }
+  }
+}
+
+.averageRating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-md;
+  padding: $spacing-lg 0;
+  border-bottom: 1rpx solid $color-divider;
+  margin-bottom: $spacing-lg;
+
+  .score {
+    font-size: 72rpx;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+  }
+
+  .info {
+    .stars {
+      margin-bottom: $spacing-xs;
+    }
+
+    .count {
+      font-size: $font-size-sm;
+      color: $color-text-tertiary;
+    }
+  }
+}
+
+.ratingDistribution {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+
+  .distributionItem {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+
+    .starLabel {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+      width: 80rpx;
+    }
+
+    .bar {
+      flex: 1;
+      height: 16rpx;
+      background-color: $color-divider;
+      border-radius: $radius-round;
+      overflow: hidden;
+
+      .fill {
+        height: 100%;
+        background: linear-gradient(90deg, $color-primary 0%, $color-primary-light 100%);
+        border-radius: $radius-round;
+      }
+    }
+
+    .count {
+      font-size: $font-size-sm;
+      color: $color-text-tertiary;
+      width: 60rpx;
+      text-align: right;
+    }
+  }
+}

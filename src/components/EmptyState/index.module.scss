@@ -1,0 +1,47 @@
+@use '@/styles/variables.scss' as *;
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl * 2;
+}
+
+.emptyIcon {
+  font-size: 120rpx;
+  margin-bottom: $spacing-lg;
+  opacity: 0.6;
+}
+
+.emptyTitle {
+  font-size: $font-size-lg;
+  color: $color-text-primary;
+  font-weight: $font-weight-semibold;
+  margin-bottom: $spacing-sm;
+}
+
+.emptyDescription {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  text-align: center;
+  margin-bottom: $spacing-lg;
+  line-height: $line-height-normal;
+}
+
+.emptyButton {
+  @include button-reset;
+  height: $button-height-md;
+  padding: 0 $spacing-xl;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  min-width: 200rpx;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}

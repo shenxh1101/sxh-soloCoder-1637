@@ -1,0 +1,464 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background-color: $color-bg-page;
+  padding-bottom: 160rpx;
+}
+
+.banner {
+  height: 320rpx;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -100rpx;
+    right: -100rpx;
+    width: 400rpx;
+    height: 400rpx;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -80rpx;
+    left: -80rpx;
+    width: 300rpx;
+    height: 300rpx;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+  }
+}
+
+.bannerContent {
+  position: relative;
+  z-index: 1;
+  padding: $spacing-xl $page-padding;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.activityName {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  margin-bottom: $spacing-sm;
+}
+
+.activityMeta {
+  display: flex;
+  gap: $spacing-md;
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: $font-size-sm;
+
+  .icon {
+    font-size: $font-size-md;
+  }
+}
+
+.statusBadge {
+  position: absolute;
+  top: $spacing-lg;
+  right: $page-padding;
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  z-index: 1;
+
+  &.upcoming {
+    background: rgba(255, 152, 0, 0.9);
+    color: $color-text-white;
+  }
+
+  &.ongoing {
+    background: rgba(76, 175, 80, 0.9);
+    color: $color-text-white;
+  }
+
+  &.completed {
+    background: rgba(158, 158, 158, 0.9);
+    color: $color-text-white;
+  }
+}
+
+.content {
+  margin-top: -$spacing-lg;
+  position: relative;
+  z-index: 2;
+}
+
+.card {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  margin: $spacing-md $page-padding;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.cardTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  .icon {
+    font-size: $font-size-xl;
+  }
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-md;
+}
+
+.infoItem {
+  .label {
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+    margin-bottom: $spacing-xs;
+  }
+
+  .value {
+    font-size: $font-size-md;
+    color: $color-text-primary;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.leaderSection {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.leaderAvatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: $radius-round;
+  background-color: $color-divider;
+}
+
+.leaderInfo {
+  flex: 1;
+
+  .name {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+  }
+
+  .stats {
+    display: flex;
+    gap: $spacing-md;
+    margin-top: $spacing-xs;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+}
+
+.contactBtn {
+  padding: $spacing-sm $spacing-md;
+  background: rgba(46, 125, 50, 0.1);
+  border-radius: $radius-md;
+  color: $color-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+}
+
+.itineraryList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.itineraryItem {
+  display: flex;
+  gap: $spacing-md;
+
+  .dayBadge {
+    width: 64rpx;
+    height: 64rpx;
+    border-radius: $radius-md;
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: $color-text-white;
+    flex-shrink: 0;
+
+    .dayNum {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+      line-height: 1;
+    }
+
+    .dayText {
+      font-size: $font-size-xs;
+    }
+  }
+
+  .content {
+    flex: 1;
+    padding-bottom: $spacing-md;
+    border-bottom: 1rpx solid $color-divider;
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .time {
+      font-size: $font-size-sm;
+      color: $color-primary;
+      font-weight: $font-weight-medium;
+      margin-bottom: $spacing-xs;
+    }
+
+    .activity {
+      font-size: $font-size-md;
+      color: $color-text-primary;
+      margin-bottom: $spacing-xs;
+    }
+
+    .location {
+      font-size: $font-size-sm;
+      color: $color-text-tertiary;
+      display: flex;
+      align-items: center;
+      gap: $spacing-xs;
+    }
+  }
+}
+
+.participantsList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.participantItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+
+  .avatar {
+    width: 72rpx;
+    height: 72rpx;
+    border-radius: $radius-round;
+    background-color: $color-divider;
+  }
+
+  .info {
+    flex: 1;
+
+    .name {
+      font-size: $font-size-md;
+      color: $color-text-primary;
+      font-weight: $font-weight-medium;
+    }
+
+    .checkInStatus {
+      font-size: $font-size-xs;
+      color: $color-text-tertiary;
+      margin-top: $spacing-xs;
+    }
+  }
+
+  .checkInBadge {
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $radius-round;
+    font-size: $font-size-xs;
+
+    &.checked {
+      background: rgba(76, 175, 80, 0.1);
+      color: $color-success;
+    }
+
+    &.unchecked {
+      background: rgba(158, 158, 158, 0.1);
+      color: $color-text-tertiary;
+    }
+  }
+}
+
+.equipmentPreview {
+  .equipmentCount {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-bottom: $spacing-md;
+  }
+
+  .equipmentList {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    max-height: 400rpx;
+    overflow-y: auto;
+  }
+
+  .viewAll {
+    margin-top: $spacing-md;
+    text-align: center;
+    color: $color-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    padding: $spacing-sm;
+    background: rgba(46, 125, 50, 0.05);
+    border-radius: $radius-md;
+  }
+}
+
+.progressSection {
+  .progressHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-sm;
+
+    .label {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+    }
+
+    .percent {
+      font-size: $font-size-md;
+      color: $color-primary;
+      font-weight: $font-weight-semibold;
+    }
+  }
+
+  .progressBar {
+    height: 16rpx;
+    background: $color-divider;
+    border-radius: $radius-round;
+    overflow: hidden;
+
+    .progressFill {
+      height: 100%;
+      background: linear-gradient(90deg, $color-primary 0%, $color-primary-light 100%);
+      border-radius: $radius-round;
+      transition: width $transition-base;
+    }
+  }
+}
+
+.timelineSection {
+  .timelineList {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.emptyTimeline {
+  text-align: center;
+  padding: $spacing-xl;
+  color: $color-text-tertiary;
+  font-size: $font-size-sm;
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc($spacing-md + env(safe-area-inset-bottom));
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: $spacing-md;
+  z-index: 100;
+
+  .btn {
+    flex: 1;
+    height: 88rpx;
+    border-radius: $radius-lg;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+
+    &.secondary {
+      background: rgba(46, 125, 50, 0.1);
+      color: $color-primary;
+    }
+
+    &.primary {
+      background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+      color: $color-text-white;
+    }
+
+    &.disabled {
+      opacity: 0.5;
+    }
+  }
+}
+
+.ratingSection {
+  .ratingRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-sm 0;
+
+    .label {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+    }
+
+    .value {
+      font-size: $font-size-md;
+      color: $color-primary;
+      font-weight: $font-weight-semibold;
+    }
+  }
+}
+
+.sectionActions {
+  display: flex;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+
+  .actionBtn {
+    flex: 1;
+    padding: $spacing-md;
+    border-radius: $radius-md;
+    text-align: center;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+
+    &.primary {
+      background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+      color: $color-text-white;
+    }
+
+    &.secondary {
+      background: rgba(46, 125, 50, 0.1);
+      color: $color-primary;
+    }
+  }
+}

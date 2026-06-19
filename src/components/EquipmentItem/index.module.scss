@@ -1,0 +1,100 @@
+@use '@/styles/variables.scss' as *;
+
+.equipmentItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md;
+  background-color: $color-bg-card;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-sm;
+  box-shadow: $shadow-card;
+}
+
+.itemInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  flex: 1;
+}
+
+.itemIcon {
+  width: 64rpx;
+  height: 64rpx;
+  background: linear-gradient(135deg, rgba(46, 125, 50, 0.1), rgba(76, 175, 80, 0.1));
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconText {
+  font-size: $font-size-xl;
+}
+
+.itemDetail {
+  flex: 1;
+  min-width: 0;
+}
+
+.itemName {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  @include text-ellipsis;
+  margin-bottom: 4rpx;
+}
+
+.itemMeta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.categoryTag {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  background-color: rgba(46, 125, 50, 0.1);
+  padding: 2rpx $spacing-sm;
+  border-radius: $radius-round;
+}
+
+.quantity {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.personalTag {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  background-color: $color-divider;
+  padding: 2rpx $spacing-sm;
+  border-radius: $radius-round;
+}
+
+.statusBadge {
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &.pending {
+    background-color: rgba(255, 125, 0, 0.1);
+    color: $color-warning;
+  }
+  &.packed {
+    background-color: rgba(0, 180, 42, 0.1);
+    color: $color-success;
+  }
+  &.missing {
+    background-color: rgba(245, 63, 63, 0.1);
+    color: $color-error;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}

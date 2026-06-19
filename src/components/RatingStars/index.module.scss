@@ -1,0 +1,44 @@
+@use '@/styles/variables.scss' as *;
+
+.ratingStars {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  &.sm {
+    .star {
+      font-size: $font-size-md;
+    }
+  }
+
+  &.md {
+    .star {
+      font-size: $font-size-xl;
+    }
+  }
+
+  &.lg {
+    gap: $spacing-sm;
+    .star {
+      font-size: $font-size-xxl;
+    }
+  }
+}
+
+.star {
+  color: $color-divider;
+  transition: all $transition-fast;
+  line-height: 1;
+
+  &.active {
+    color: $color-warning;
+  }
+
+  &.clickable {
+    cursor: pointer;
+
+    &:active {
+      transform: scale(1.2);
+    }
+  }
+}

@@ -1,0 +1,62 @@
+@use '@/styles/variables.scss' as *;
+
+.gradeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  border-radius: $radius-round;
+  padding: 0 $spacing-sm;
+
+  &.sm {
+    height: 40rpx;
+    .gradeIcon {
+      width: 28rpx;
+      height: 28rpx;
+      font-size: 16rpx;
+    }
+    .gradeLabel {
+      font-size: $font-size-xs;
+    }
+  }
+
+  &.md {
+    height: 48rpx;
+    .gradeIcon {
+      width: 32rpx;
+      height: 32rpx;
+      font-size: 18rpx;
+    }
+    .gradeLabel {
+      font-size: $font-size-sm;
+    }
+  }
+
+  &.lg {
+    height: 56rpx;
+    padding: 0 $spacing-md;
+    .gradeIcon {
+      width: 40rpx;
+      height: 40rpx;
+      font-size: 22rpx;
+    }
+    .gradeLabel {
+      font-size: $font-size-md;
+    }
+  }
+}
+
+.gradeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-round;
+}
+
+.gradeIconText {
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+}
+
+.gradeLabel {
+  font-weight: $font-weight-semibold;
+}
