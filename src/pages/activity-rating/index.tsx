@@ -74,6 +74,9 @@ const ActivityRatingPage: React.FC = () => {
     Taro.showLoading({ title: '提交中...' });
 
     setTimeout(() => {
+      const existingReviewCount = activity.ratings?.reviews?.length || 0;
+      const isFirstReviewForActivity = existingReviewCount === 0;
+
       addReview(activity.id, {
         userId: currentUser.id,
         userName: currentUser.name,
@@ -85,7 +88,10 @@ const ActivityRatingPage: React.FC = () => {
 
       const avgRating = (facilitiesRating + routeRating) / 2;
       updateLeaderRating(activity.leaderId, avgRating);
-      incrementLeaderActivityCount(activity.leaderId);
+
+      if (isFirstReviewForActivity) {
+        incrementLeaderActivityCount(activity.leaderId);
+      }
 
       Taro.hideLoading();
       Taro.showToast({ title: '评分成功', icon: 'success' });

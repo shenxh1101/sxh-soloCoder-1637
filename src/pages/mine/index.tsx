@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView } from '@tarojs/components';
 import Taro, { useDidShow, usePullDownRefresh } from '@tarojs/taro';
+import dayjs from 'dayjs';
 import classnames from 'classnames';
 import { useUserStore } from '@/store/useUserStore';
 import { useActivityStore } from '@/store/useActivityStore';
@@ -15,6 +16,7 @@ const MinePage: React.FC = () => {
   const { currentUser, setCurrentUser } = useUserStore();
   const { activities, setActivities } = useActivityStore();
   const [loading, setLoading] = useState(false);
+  const [showReportTip, setShowReportTip] = useState(false);
 
   useEffect(() => {
     initData();
@@ -23,6 +25,21 @@ const MinePage: React.FC = () => {
   useDidShow(() => {
     if (!currentUser) {
       initData();
+    }
+    
+    const today = dayjs().date();
+    const isFirstDayOfMonth = today === 1;
+    const currentMonth = dayjs().format('YYYY-MM');
+    const hasShownTip = Taro.getStorageSync(`report_shown_${currentMonth}`);
+    const hasShownInMine = Taro.getStorageSync(`report_shown_mine_${currentMonth}`);
+    
+    if (isFirstDayOfMonth && !hasShownInMine) {
+      setShowReportTip(true);
+      Taro.setStorageSync(`report_shown_mine_${currentMonth}`, true);
+      if (!hasShownTip) {
+        Taro.setStorageSync(`report_shown_${currentMonth}`, true);
+      }
+      setTimeout(() => setShowReportTip(false), 3000);
     }
   });
 
@@ -151,6 +168,16 @@ const MinePage: React.FC = () => {
 
   return (
     <ScrollView className={styles.page} scrollY>
+      {showReportTip && (
+        <View 
+          className={styles.reportTip}
+          onClick={() => Taro.navigateTo({ url: '/pages/monthly-report/index' })}
+        >
+          <Text className={styles.tipIcon}>✨</Text>
+          <Text className={styles.tipText}>{dayjs().format('YYYY年M月')}月度报告已生成，点击查看</Text>
+          <Text className={styles.tipArrow}>{'>'}</Text>
+        </View>
+      )}
       <View className={styles.profileHeader}>
         <View className={styles.profileRow}>
           {currentUser && (

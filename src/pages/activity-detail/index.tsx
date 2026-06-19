@@ -23,8 +23,8 @@ const statusText: Record<string, string> = {
 
 const ActivityDetailPage: React.FC = () => {
   const router = useRouter();
-  const { getActivityById, updateEquipmentStatus, checkInParticipant, sendPackingReminder, checkAndSendPackingReminders, updateActivityStatus, approveApplication, rejectApplication } = useActivityStore();
-  const { currentUser } = useUserStore();
+  const { getActivityById, updateEquipmentStatus, checkInParticipant, sendPackingReminder, checkAndSendPackingReminders, markReminderShown, hasShownReminder, updateActivityStatus, approveApplication, rejectApplication } = useActivityStore();
+  const { currentUser, users, getUserById } = useUserStore();
   const [activity, setActivity] = useState<Activity | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -48,7 +48,8 @@ const ActivityDetailPage: React.FC = () => {
       const reminders = checkAndSendPackingReminders();
       if (reminders.length > 0) {
         const reminderActivity = reminders.find(r => r.id === activityId);
-        if (reminderActivity) {
+        if (reminderActivity && !hasShownReminder(activityId)) {
+          markReminderShown(activityId);
           Taro.showModal({
             title: '打包提醒',
             content: `明天就是"${reminderActivity.name}"的出发日啦，记得检查装备清单，准备好所有物品哦！`,
@@ -199,7 +200,7 @@ const ActivityDetailPage: React.FC = () => {
   }
 
   const pendingApplications = activity.joinApplications.filter(app => app.status === 'pending');
-  const leader = mockUsers.find(u => u.id === activity.leaderId);
+  const leader = getUserById(activity.leaderId) || users.find(u => u.id === activity.leaderId);
 
   return (
     <ScrollView className={styles.page} scrollY>

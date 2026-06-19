@@ -8,6 +8,7 @@ import { recommendEquipment, generateItinerary } from '@/utils/equipmentRecommen
 interface ActivityState {
   activities: Activity[];
   currentActivity: Activity | null;
+  shownReminderActivityIds: string[];
   setActivities: (activities: Activity[]) => void;
   setCurrentActivity: (activity: Activity | null) => void;
   getActivityById: (id: string) => Activity | undefined;
@@ -19,15 +20,18 @@ interface ActivityState {
   checkInParticipant: (activityId: string, userId: string) => void;
   addLog: (activityId: string, log: Omit<ActivityLog, 'id' | 'createdAt'>) => ActivityLog | null;
   addPhoto: (activityId: string, userId: string, userName: string, imageUrl: string) => void;
-  addReview: (activityId: string, review: Omit<ActivityReview, 'id' | 'createdAt'>) => void;
+  addReview: (activityId: string, review: Omit<ActivityReview, 'id' | 'createdAt'>) => ActivityReview | null;
   sendPackingReminder: (activityId: string) => void;
   checkAndSendPackingReminders: () => Activity[];
+  markReminderShown: (activityId: string) => void;
+  hasShownReminder: (activityId: string) => boolean;
   updateActivityStatus: (activityId: string, status: Activity['status']) => void;
 }
 
 export const useActivityStore = create<ActivityState>((set, get) => ({
   activities: [],
   currentActivity: null,
+  shownReminderActivityIds: [],
 
   setActivities: (activities) => {
     console.log('[ActivityStore] 设置活动列表', activities.length);
@@ -354,6 +358,8 @@ export const useActivityStore = create<ActivityState>((set, get) => ({
         return a;
       })
     }));
+    
+    return newReview;
   },
 
   sendPackingReminder: (activityId) => {
@@ -423,6 +429,20 @@ export const useActivityStore = create<ActivityState>((set, get) => ({
 
     console.log('[ActivityStore] 需要提醒的活动数量', activitiesToRemind.length);
     return activitiesToRemind;
+  },
+
+  markReminderShown: (activityId) => {
+    console.log('[ActivityStore] 标记提醒已显示', { activityId });
+    set(state => {
+      if (state.shownReminderActivityIds.includes(activityId)) return state;
+      return {
+        shownReminderActivityIds: [...state.shownReminderActivityIds, activityId]
+      };
+    });
+  },
+
+  hasShownReminder: (activityId) => {
+    return get().shownReminderActivityIds.includes(activityId);
   },
 
   updateActivityStatus: (activityId, status) => {

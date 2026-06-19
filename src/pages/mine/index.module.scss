@@ -6,6 +6,42 @@
   padding-bottom: $spacing-xl;
 }
 
+.reportTip {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md $page-padding;
+  background: linear-gradient(90deg, #e8f5e9 0%, #c8e6c9 100%);
+  color: $color-primary;
+  animation: slideDown 0.5s ease-out;
+
+  .tipIcon {
+    margin-right: $spacing-sm;
+    font-size: $font-size-lg;
+  }
+
+  .tipText {
+    flex: 1;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+  }
+
+  .tipArrow {
+    font-size: $font-size-sm;
+    margin-left: $spacing-sm;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .profileHeader {
   background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
   padding: $spacing-xl $page-padding;

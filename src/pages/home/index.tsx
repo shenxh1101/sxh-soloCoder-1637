@@ -15,10 +15,11 @@ import styles from './index.module.scss';
 type TabType = 'all' | 'upcoming' | 'ongoing' | 'completed';
 
 const HomePage: React.FC = () => {
-  const { activities, setActivities } = useActivityStore();
-  const { currentUser, setCurrentUser } = useUserStore();
+  const { activities, setActivities, checkAndSendPackingReminders, markReminderShown, hasShownReminder } = useActivityStore();
+  const { currentUser, setCurrentUser, users } = useUserStore();
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [loading, setLoading] = useState(false);
+  const [pendingReminderShown, setPendingReminderShown] = useState(false);
 
   useEffect(() => {
     initData();
@@ -27,6 +28,25 @@ const HomePage: React.FC = () => {
   useDidShow(() => {
     if (activities.length === 0) {
       initData();
+    }
+    
+    if (!pendingReminderShown) {
+      setTimeout(() => {
+        const reminders = checkAndSendPackingReminders();
+        if (reminders.length > 0) {
+          const firstReminder = reminders[0];
+          if (!hasShownReminder(firstReminder.id)) {
+            markReminderShown(firstReminder.id);
+            Taro.showModal({
+              title: '打包提醒',
+              content: `明天就是"${firstReminder.name}"的出发日啦，记得检查装备清单，准备好所有物品哦！`,
+              showCancel: false,
+              confirmText: '我知道了'
+            });
+            setPendingReminderShown(true);
+          }
+        }
+      }, 500);
     }
   });
 
@@ -76,7 +96,7 @@ const HomePage: React.FC = () => {
     return a.status === activeTab;
   });
 
-  const sortedLeaders = [...mockUsers]
+  const sortedLeaders = [...users]
     .sort((a, b) => {
       if (b.averageRating !== a.averageRating) return b.averageRating - a.averageRating;
       return b.activityCount - a.activityCount;
