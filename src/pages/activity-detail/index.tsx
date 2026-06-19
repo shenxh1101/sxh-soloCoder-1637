@@ -23,7 +23,7 @@ const statusText: Record<string, string> = {
 
 const ActivityDetailPage: React.FC = () => {
   const router = useRouter();
-  const { getActivityById, updateEquipmentStatus, checkInParticipant, sendPackingReminder, checkAndSendPackingReminders, markReminderShown, hasShownReminder, updateActivityStatus, approveApplication, rejectApplication } = useActivityStore();
+  const { getActivityById, updateEquipmentStatus, checkInParticipant, sendPackingReminder, checkAndSendPackingReminders, markReminderShown, hasShownReminder, loadShownRemindersFromStorage, updateActivityStatus, approveApplication, rejectApplication } = useActivityStore();
   const { currentUser, users, getUserById } = useUserStore();
   const [activity, setActivity] = useState<Activity | null>(null);
   const [loading, setLoading] = useState(false);
@@ -45,6 +45,7 @@ const ActivityDetailPage: React.FC = () => {
   const loadActivity = () => {
     setLoading(true);
     setTimeout(() => {
+      loadShownRemindersFromStorage();
       const reminders = checkAndSendPackingReminders();
       if (reminders.length > 0) {
         const reminderActivity = reminders.find(r => r.id === activityId);
@@ -69,11 +70,15 @@ const ActivityDetailPage: React.FC = () => {
   const refreshActivity = () => {
     setLoading(true);
     setTimeout(() => {
+      loadShownRemindersFromStorage();
       const act = getActivityById(activityId);
       setActivity(act ? { ...act } : null);
       setLoading(false);
       Taro.stopPullDownRefresh();
-      Taro.showToast({ title: '刷新成功', icon: 'success' });
+      Taro.showToast({
+        title: '刷新成功',
+        icon: 'success'
+      });
     }, 500);
   };
 
@@ -140,7 +145,9 @@ const ActivityDetailPage: React.FC = () => {
   const handleSendReminder = () => {
     if (!activity) return;
     sendPackingReminder(activity.id);
-    loadActivity();
+    setTimeout(() => {
+      loadActivity();
+    }, 100);
   };
 
   const handleEquipmentStatusChange = (equipmentId: string, status: EquipmentStatus) => {

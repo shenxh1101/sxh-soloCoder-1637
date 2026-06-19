@@ -1,9 +1,12 @@
 import { create } from 'zustand';
+import Taro from '@tarojs/taro';
 import dayjs from 'dayjs';
 import type { Activity, CreateActivityForm, ActivityLog, ActivityReview, TimelineItem } from '@/types/activity';
 import type { Participant, JoinApplication } from '@/types/user';
 import type { EquipmentStatus } from '@/types/equipment';
 import { recommendEquipment, generateItinerary } from '@/utils/equipmentRecommender';
+
+const SHOWN_REMINDER_STORAGE_KEY = 'packing_reminder_shown_ids';
 
 interface ActivityState {
   activities: Activity[];
@@ -25,13 +28,31 @@ interface ActivityState {
   checkAndSendPackingReminders: () => Activity[];
   markReminderShown: (activityId: string) => void;
   hasShownReminder: (activityId: string) => boolean;
+  loadShownRemindersFromStorage: () => void;
   updateActivityStatus: (activityId: string, status: Activity['status']) => void;
 }
+
+const getStoredReminderIds = (): string[] => {
+  try {
+    const stored = Taro.getStorageSync(SHOWN_REMINDER_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch (e) {
+    return [];
+  }
+};
+
+const saveReminderIdsToStorage = (ids: string[]) => {
+  try {
+    Taro.setStorageSync(SHOWN_REMINDER_STORAGE_KEY, JSON.stringify(ids));
+  } catch (e) {
+    console.error('[ActivityStore] 保存提醒ID失败', e);
+  }
+};
 
 export const useActivityStore = create<ActivityState>((set, get) => ({
   activities: [],
   currentActivity: null,
-  shownReminderActivityIds: [],
+  shownReminderActivityIds: getStoredReminderIds(),
 
   setActivities: (activities) => {
     console.log('[ActivityStore] 设置活动列表', activities.length);
@@ -364,21 +385,20 @@ export const useActivityStore = create<ActivityState>((set, get) => ({
 
   sendPackingReminder: (activityId) => {
     console.log('[ActivityStore] 发送打包提醒', { activityId });
+    const now = Date.now();
+    
+    get().markReminderShown(activityId);
     
     set(state => ({
       activities: state.activities.map(a => {
         if (a.id === activityId) {
-          Taro.showToast({
-            title: '已推送打包提醒',
-            icon: 'success'
-          });
           return {
             ...a,
             packingReminderSent: true,
             timeline: [
               ...a.timeline,
               {
-                id: `t_${Date.now()}`,
+                id: `t_${now}`,
                 time: dayjs().format('YYYY-MM-DD HH:mm'),
                 type: 'system',
                 content: '已发送出发前打包提醒'
@@ -389,6 +409,11 @@ export const useActivityStore = create<ActivityState>((set, get) => ({
         return a;
       })
     }));
+    
+    Taro.showToast({
+      title: '已推送打包提醒',
+      icon: 'success'
+    });
   },
 
   checkAndSendPackingReminders: () => {
@@ -435,14 +460,22 @@ export const useActivityStore = create<ActivityState>((set, get) => ({
     console.log('[ActivityStore] 标记提醒已显示', { activityId });
     set(state => {
       if (state.shownReminderActivityIds.includes(activityId)) return state;
+      const newIds = [...state.shownReminderActivityIds, activityId];
+      saveReminderIdsToStorage(newIds);
       return {
-        shownReminderActivityIds: [...state.shownReminderActivityIds, activityId]
+        shownReminderActivityIds: newIds
       };
     });
   },
 
   hasShownReminder: (activityId) => {
     return get().shownReminderActivityIds.includes(activityId);
+  },
+
+  loadShownRemindersFromStorage: () => {
+    console.log('[ActivityStore] 从Storage加载已提醒ID');
+    const storedIds = getStoredReminderIds();
+    set({ shownReminderActivityIds: storedIds });
   },
 
   updateActivityStatus: (activityId, status) => {

@@ -4,7 +4,7 @@ import Taro, { usePullDownRefresh, useDidShow } from '@tarojs/taro';
 import dayjs from 'dayjs';
 import { useActivityStore } from '@/store/useActivityStore';
 import { useEquipmentStore } from '@/store/useEquipmentStore';
-import { generateMonthlyReport, exportToPDF } from '@/utils/reportGenerator';
+import { generateMonthlyReport, exportToPDF, getReportShownMonth, setReportShownMonth } from '@/utils/reportGenerator';
 import { mockActivities } from '@/data/mockActivities';
 import { mockUsageRecords } from '@/data/mockEquipments';
 import EmptyState from '@/components/EmptyState';
@@ -34,13 +34,15 @@ const MonthlyReportPage: React.FC = () => {
     
     const today = dayjs().date();
     const isFirstDayOfMonth = today === 1;
-    const currentMonth = dayjs().format('YYYY-MM');
-    const hasShownTip = Taro.getStorageSync(`report_shown_${currentMonth}`);
+    const isCurrentMonth = selectedMonth === dayjs().format('YYYY-MM');
+    const hasShownTip = getReportShownMonth();
     
-    if (isFirstDayOfMonth && !hasShownTip) {
+    if (isFirstDayOfMonth && isCurrentMonth && !hasShownTip) {
       setShowAutoGenerateTip(true);
-      Taro.setStorageSync(`report_shown_${currentMonth}`, true);
+      setReportShownMonth();
       setTimeout(() => setShowAutoGenerateTip(false), 3000);
+    } else if (isFirstDayOfMonth && isCurrentMonth && hasShownTip) {
+      setShowAutoGenerateTip(false);
     }
   });
 
@@ -133,6 +135,9 @@ const MonthlyReportPage: React.FC = () => {
     );
   }, [selectedMonth]);
 
+  const isCurrentMonth = selectedMonth === dayjs().format('YYYY-MM');
+  const isReportGenerated = dayjs().date() >= 1 && isCurrentMonth;
+
   if (loading && !report) {
     return (
       <ScrollView className={styles.page} scrollY>
@@ -146,6 +151,12 @@ const MonthlyReportPage: React.FC = () => {
   if (!report || report.totalActivities === 0) {
     return (
       <ScrollView className={styles.page} scrollY>
+        {showAutoGenerateTip && (
+          <View className={styles.autoGenerateTip}>
+            <Text className={styles.tipIcon}>✨</Text>
+            <Text className={styles.tipText}>{dayjs().format('YYYY年M月')}月度报告已自动生成</Text>
+          </View>
+        )}
         <View className={styles.header}>
           <View className={styles.titleRow}>
             <Text className={styles.title}>月度报告</Text>
@@ -162,9 +173,18 @@ const MonthlyReportPage: React.FC = () => {
             </Picker>
           </View>
         </View>
+        {isReportGenerated && (
+          <View className={styles.reportGeneratedNotice}>
+            <Text className={styles.noticeIcon}>📄</Text>
+            <View className={styles.noticeContent}>
+              <Text className={styles.noticeTitle}>{dayjs().format('YYYY年M月')}报告已生成</Text>
+              <Text className={styles.noticeDesc}>本月暂无户外活动数据</Text>
+            </View>
+          </View>
+        )}
         <EmptyState
           icon="Chart"
-          title="暂无数据"
+          title="暂无活动数据"
           description={`${selectedMonth} 月暂无户外活动数据`}
           buttonText="去发布活动"
           onButtonClick={() => Taro.switchTab({ url: '/pages/create/index' })}

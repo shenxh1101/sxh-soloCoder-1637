@@ -4,6 +4,10 @@ import type { Activity, MonthlyReport } from '@/types/activity';
 import type { UsageRecord, Equipment } from '@/types/equipment';
 import { mockEquipments } from '@/data/mockEquipments';
 
+export const REPORT_SHOWN_STORAGE_KEY = (month: string) => `report_shown_${month}`;
+export const getReportShownMonth = () => Taro.getStorageSync(REPORT_SHOWN_STORAGE_KEY(dayjs().format('YYYY-MM')));
+export const setReportShownMonth = () => Taro.setStorageSync(REPORT_SHOWN_STORAGE_KEY(dayjs().format('YYYY-MM')), true);
+
 const getEquipmentName = (equipmentId: string): string => {
   const equipment = mockEquipments.find(e => e.id === equipmentId);
   return equipment?.name || equipmentId;

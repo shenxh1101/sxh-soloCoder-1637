@@ -9,6 +9,7 @@ import { mockCurrentUser, mockUsers } from '@/data/mockUsers';
 import { mockActivities } from '@/data/mockActivities';
 import GradeBadge from '@/components/GradeBadge';
 import { getGradeLabel, calculateLeaderGrade } from '@/utils/gradeCalculator';
+import { getReportShownMonth, setReportShownMonth } from '@/utils/reportGenerator';
 import type { LeaderGrade } from '@/types/user';
 import styles from './index.module.scss';
 
@@ -29,16 +30,11 @@ const MinePage: React.FC = () => {
     
     const today = dayjs().date();
     const isFirstDayOfMonth = today === 1;
-    const currentMonth = dayjs().format('YYYY-MM');
-    const hasShownTip = Taro.getStorageSync(`report_shown_${currentMonth}`);
-    const hasShownInMine = Taro.getStorageSync(`report_shown_mine_${currentMonth}`);
+    const hasShownTip = getReportShownMonth();
     
-    if (isFirstDayOfMonth && !hasShownInMine) {
+    if (isFirstDayOfMonth && !hasShownTip) {
       setShowReportTip(true);
-      Taro.setStorageSync(`report_shown_mine_${currentMonth}`, true);
-      if (!hasShownTip) {
-        Taro.setStorageSync(`report_shown_${currentMonth}`, true);
-      }
+      setReportShownMonth();
       setTimeout(() => setShowReportTip(false), 3000);
     }
   });

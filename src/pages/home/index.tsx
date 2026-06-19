@@ -15,11 +15,10 @@ import styles from './index.module.scss';
 type TabType = 'all' | 'upcoming' | 'ongoing' | 'completed';
 
 const HomePage: React.FC = () => {
-  const { activities, setActivities, checkAndSendPackingReminders, markReminderShown, hasShownReminder } = useActivityStore();
+  const { activities, setActivities, checkAndSendPackingReminders, markReminderShown, hasShownReminder, loadShownRemindersFromStorage } = useActivityStore();
   const { currentUser, setCurrentUser, users } = useUserStore();
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [loading, setLoading] = useState(false);
-  const [pendingReminderShown, setPendingReminderShown] = useState(false);
 
   useEffect(() => {
     initData();
@@ -28,26 +27,24 @@ const HomePage: React.FC = () => {
   useDidShow(() => {
     if (activities.length === 0) {
       initData();
+      return;
     }
     
-    if (!pendingReminderShown) {
-      setTimeout(() => {
-        const reminders = checkAndSendPackingReminders();
-        if (reminders.length > 0) {
-          const firstReminder = reminders[0];
-          if (!hasShownReminder(firstReminder.id)) {
-            markReminderShown(firstReminder.id);
-            Taro.showModal({
-              title: '打包提醒',
-              content: `明天就是"${firstReminder.name}"的出发日啦，记得检查装备清单，准备好所有物品哦！`,
-              showCancel: false,
-              confirmText: '我知道了'
-            });
-            setPendingReminderShown(true);
-          }
-        }
-      }, 500);
-    }
+    setTimeout(() => {
+      const reminders = checkAndSendPackingReminders();
+      const unshownReminders = reminders.filter(r => !hasShownReminder(r.id));
+      
+      if (unshownReminders.length > 0) {
+        const firstReminder = unshownReminders[0];
+        markReminderShown(firstReminder.id);
+        Taro.showModal({
+          title: '打包提醒',
+          content: `明天就是"${firstReminder.name}"的出发日啦，记得检查装备清单，准备好所有物品哦！`,
+          showCancel: false,
+          confirmText: '我知道了'
+        });
+      }
+    }, 500);
   });
 
   usePullDownRefresh(() => {
@@ -57,6 +54,7 @@ const HomePage: React.FC = () => {
   const initData = () => {
     setLoading(true);
     setTimeout(() => {
+      loadShownRemindersFromStorage();
       setActivities(mockActivities);
       setCurrentUser(mockCurrentUser);
       setLoading(false);
@@ -67,6 +65,7 @@ const HomePage: React.FC = () => {
   const refreshData = () => {
     setLoading(true);
     setTimeout(() => {
+      loadShownRemindersFromStorage();
       setActivities([...mockActivities]);
       setLoading(false);
       Taro.stopPullDownRefresh();
